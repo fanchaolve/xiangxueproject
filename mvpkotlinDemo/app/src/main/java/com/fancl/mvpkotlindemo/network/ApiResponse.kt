@@ -1,12 +1,16 @@
 package com.fancl.mvpkotlindemo.network
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.fancl.mvpkotlindemo.bean.ResponseWapper
 import com.fancl.mvpkotlindemo.view.LoadingDialog
 import com.google.gson.Gson
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import retrofit2.adapter.rxjava.HttpException
+import retrofit2.HttpException
+
+
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -15,7 +19,7 @@ import java.net.UnknownHostException
 abstract class ApiResponse<T>(private val context: Context) : Observer<
         ResponseWapper<T>> {
 
-    abstract fun success(data: T)
+    abstract fun success(data: T?)
     abstract fun failure(statusCode: Int, apiError: ApiError)
 
     private var isShowing: Boolean = true
@@ -33,6 +37,7 @@ abstract class ApiResponse<T>(private val context: Context) : Observer<
 
     override fun onNext(t: ResponseWapper<T>) {
 
+        success(t.data)
     }
 
     override fun onError(e: Throwable) {
@@ -64,8 +69,12 @@ abstract class ApiResponse<T>(private val context: Context) : Observer<
     }
 
     private fun otherError(e: HttpException): ApiError {
-        return Gson().fromJson(e.response().errorBody()?.charStream(), ApiError::class.java)
+        return Gson().fromJson(e.response()?.errorBody()?.charStream(), ApiError::class.java)
 
+    }
+
+    override fun onComplete() {
+        LoadingDialog.cancel()
     }
 
 
