@@ -9,4 +9,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+
+    <string name="service_error">服务器出错啦~~~</string>
+    <string name="not_found">请求的资源不存在~~~</string>
+    <string name="timeout">请求超时~~~</string>
+    <string name="unknown_error">未知错误~~~</string>
+    <string name="network_error">网络有问题~~~</string>
 </resources>
